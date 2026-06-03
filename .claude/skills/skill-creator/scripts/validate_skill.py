@@ -99,7 +99,7 @@ def check(skill_md: Path):
                     "'description' should say *when* to use the skill (e.g. 'Use when ...'), "
                     "not just what it does."
                 )
-            for opener in ("i can ", "i will ", "i help", "you can ", "you should ", "we "):
+            for opener in ("i can ", "i will ", "i'll ", "i help", "you can ", "you should ", "you'll "):
                 if lowered.startswith(opener) or f" {opener}" in lowered:
                     warnings.append(
                         "write 'description' in the third person (e.g. 'Processes X'), "
@@ -175,7 +175,7 @@ def main(argv):
     for e in errors:
         print(f"  ERROR:   {e}")
 
-    name = skill_dir.name
+    name = skill_dir.resolve().name
     if errors:
         print(f"\n✗ {name}: {len(errors)} error(s), {len(warnings)} warning(s).")
         return 1

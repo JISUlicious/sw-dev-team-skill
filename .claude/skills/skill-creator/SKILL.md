@@ -39,7 +39,8 @@ Pin down two things before writing anything:
 - **When** Claude should reach for it (the triggers — phrases, file types, tasks).
 
 If either is vague, ask. A skill whose triggers are fuzzy either never fires or fires
-constantly. Also decide the content shape (see `reference/best-practices.md`):
+constantly. Also decide the content shape (see `reference/claude-code-features.md`
+§ Types of skill content):
 - **Reference content** — standing knowledge applied inline (conventions, domain facts).
 - **Task content** — step-by-step actions, often `/invoked` directly; consider
   `disable-model-invocation: true` for anything with side effects (deploy, commit, send).
@@ -49,6 +50,8 @@ constantly. Also decide the content shape (see `reference/best-practices.md`):
 Pick a `name`: lowercase letters/numbers/hyphens only, ≤ 64 chars, no XML, and it must
 **not** contain the reserved words `anthropic` or `claude`. Prefer gerund form
 (`processing-pdfs`, `analyzing-logs`) or a clear noun phrase. Avoid `helper`, `utils`, `tools`.
+(Exact rules: `reference/specification.md` § Required frontmatter fields. Naming guidance:
+`reference/best-practices.md` § Naming conventions.)
 
 Choose where it lives (this also sets the `/command` name — the directory name wins):
 
@@ -76,19 +79,24 @@ person**, and it must state **both what the skill does and when to use it**, key
 - Good: `Extract text and tables from PDF files, fill forms, merge documents. Use when working with PDFs or when the user mentions forms or document extraction.`
 - Avoid: `Helps with documents` · `I can help you process PDFs`
 
-Note: the listing truncates combined `description` + `when_to_use` at ~1,536 chars, so
-front-load the primary use case. See `reference/best-practices.md` § Writing effective descriptions.
+Note: the field's hard cap is 1,024 chars (`reference/specification.md` § Required
+frontmatter fields); separately, the Claude Code listing truncates combined `description` +
+`when_to_use` at ~1,536 chars, so front-load the primary use case. Full guidance:
+`reference/best-practices.md` § Writing effective descriptions.
 
 ### Step 5 — Write a concise body
 
 The body loads in full when the skill triggers and **stays in context for the rest of the
-session**, so every line is a recurring token cost. Write standing instructions, not
-one-time narration. Assume Claude is already smart — add only what it doesn't know.
-Match instruction specificity to task fragility (high freedom for open-ended judgment,
-low freedom / exact commands for fragile sequences). Keep it under 500 lines.
+session** (`reference/claude-code-features.md` § Skill content lifecycle), so every line is
+a recurring token cost. Write standing instructions, not one-time narration. Assume Claude
+is already smart — add only what it doesn't know. Match instruction specificity to task
+fragility — high freedom for open-ended judgment, low freedom / exact commands for fragile
+sequences (`reference/best-practices.md` § Set appropriate degrees of freedom). Keep it
+under 500 lines.
 
-Use the structural patterns (template, examples, workflow-with-checklist, validation
-feedback loop) documented in `reference/best-practices.md`.
+Use the structural patterns — template, examples, workflow-with-checklist, validation
+feedback loop — in `reference/best-practices.md` (§ Common patterns, § Workflows and
+feedback loops).
 
 ### Step 6 — Split heavy material out
 
@@ -99,6 +107,10 @@ they cost nothing until read:
 - `scripts/*` — deterministic utilities Claude **executes** (output only enters context).
   Reference them with `${CLAUDE_SKILL_DIR}/scripts/...` so paths resolve at any install level.
 - Use forward slashes in every path. State whether Claude should *run* a script or *read* it.
+
+The one-level-deep and table-of-contents rules are in `reference/best-practices.md`
+§ Progressive disclosure patterns; `${CLAUDE_SKILL_DIR}` and the other substitutions are in
+`reference/claude-code-features.md` § String substitutions.
 
 ### Step 7 — Validate
 
@@ -115,6 +127,8 @@ Trigger the skill the way a user would (a request matching the description) and 
 `/<name>` directly. If it doesn't fire, strengthen the description's keywords; if it fires
 too eagerly, narrow the description or set `disable-model-invocation: true`. Iterate by
 observing real behavior — see `reference/best-practices.md` § Evaluation and iteration.
+For triggering problems (won't fire, fires too often, or description cut short), see
+`reference/claude-code-features.md` § Troubleshooting.
 
 ## Frontmatter quick reference
 
@@ -126,23 +140,21 @@ context injection (`` !`cmd` ``) are in `reference/claude-code-features.md`.
 
 ## Bundled reference (portable docs)
 
-These are captured from the official documentation so this skill works offline:
+This skill ships the official documentation offline so it works without network access.
+**Look things up here rather than relying on memory** — frontmatter field names, character
+limits, and syntax drift over time. Read the file that owns the topic; if the answer isn't
+in the summary, open the matching mirror in `reference/raw/`. Route by topic:
 
-- **[reference/specification.md](reference/specification.md)** — what Skills are, the
-  architecture, progressive disclosure (the three loading levels), the frontmatter
-  spec with exact field rules and limits, and security considerations.
-- **[reference/claude-code-features.md](reference/claude-code-features.md)** — Claude
-  Code specifics: skill locations and precedence, the full frontmatter field table,
-  string substitutions, dynamic context injection, `context: fork`, arguments,
-  `allowed-tools`, and troubleshooting.
-- **[reference/best-practices.md](reference/best-practices.md)** — Anthropic's authoring
-  best practices: conciseness, degrees of freedom, descriptions, progressive-disclosure
-  patterns, workflows, feedback loops, anti-patterns, evaluation, and the final checklist.
+| When you need… | Read |
+| :-- | :-- |
+| What a skill is, the architecture, progressive disclosure, the **exact** `name`/`description` rules and limits, security, runtime/surface differences | [reference/specification.md](reference/specification.md) |
+| A Claude Code feature — content types, full frontmatter field table, invocation control, `$ARGUMENTS`/`${CLAUDE_SKILL_DIR}`, dynamic `` !`cmd` `` injection, `context: fork`, locations, command names, troubleshooting | [reference/claude-code-features.md](reference/claude-code-features.md) |
+| How to author well — descriptions, conciseness, degrees of freedom, progressive-disclosure patterns, workflows, feedback loops, anti-patterns, evaluation, the checklist | [reference/best-practices.md](reference/best-practices.md) |
+| The complete source for any row above, or anything a summary omits | [reference/raw/](reference/raw/) — verbatim mirrors; provenance + checksums in `reference/raw/SOURCES.md` |
 
-The files above are curated summaries — the reading layer. For the complete, unmodified
-source pages, see **`reference/raw/`** (verbatim mirrors of the official docs; provenance,
-URLs, and checksums in `reference/raw/SOURCES.md`). Read the summary first, then drill into
-the matching raw page when you need detail the summary doesn't cover.
+The three `reference/*.md` files are curated summaries — the fast reading layer. The
+`reference/raw/*.md` files are byte-for-byte copies of the official pages; treat the raw
+page as the authority if a summary and its source ever disagree.
 
 ## Security note
 

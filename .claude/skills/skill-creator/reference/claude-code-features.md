@@ -13,6 +13,7 @@ dynamic context injection. Custom commands have been merged into skills —
 `.claude/commands/deploy.md` and `.claude/skills/deploy/SKILL.md` both create `/deploy`.
 
 ## Contents
+- Types of skill content (reference vs task)
 - Where skills live (locations & precedence)
 - How a skill gets its command name
 - Discovery (parent/nested dirs, additional dirs, live reload)
@@ -26,6 +27,20 @@ dynamic context injection. Custom commands have been merged into skills —
 - Run skills in a subagent (`context: fork`)
 - Restrict Claude's skill access
 - Troubleshooting
+
+## Types of skill content
+
+Two broad shapes; how you intend to invoke the skill guides what to put in it:
+
+- **Reference content** — standing knowledge Claude applies to the current work
+  (conventions, patterns, style guides, domain facts). Runs inline alongside the
+  conversation context.
+- **Task content** — step-by-step instructions for a specific action (deploy, commit,
+  code generation). Often invoked directly with `/skill-name`; add
+  `disable-model-invocation: true` to keep Claude from triggering side effects on its own.
+
+Keep the body concise either way: once loaded it stays in context across turns, so every
+line is a recurring token cost. State *what to do* rather than narrating *how* or *why*.
 
 ## Where skills live
 
