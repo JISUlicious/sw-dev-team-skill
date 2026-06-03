@@ -139,6 +139,11 @@ These are captured from the official documentation so this skill works offline:
   best practices: conciseness, degrees of freedom, descriptions, progressive-disclosure
   patterns, workflows, feedback loops, anti-patterns, evaluation, and the final checklist.
 
+The files above are curated summaries — the reading layer. For the complete, unmodified
+source pages, see **`reference/raw/`** (verbatim mirrors of the official docs; provenance,
+URLs, and checksums in `reference/raw/SOURCES.md`). Read the summary first, then drill into
+the matching raw page when you need detail the summary doesn't cover.
+
 ## Security note
 
 Skills grant Claude new instructions and code. When creating one that runs scripts or

@@ -131,6 +131,9 @@ def check_reference_files(skill_dir: Path):
     for md in sorted(skill_dir.rglob("*.md")):
         if md.name == "SKILL.md":
             continue
+        # Skip verbatim source mirrors — they are reproduced as-is, not authored here.
+        if "raw" in md.relative_to(skill_dir).parts:
+            continue
         lines = md.read_text(encoding="utf-8").splitlines()
         if len(lines) > TOC_THRESHOLD_LINES:
             head = "\n".join(lines[:40]).lower()

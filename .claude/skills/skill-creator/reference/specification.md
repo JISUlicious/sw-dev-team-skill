@@ -1,5 +1,9 @@
 # Agent Skills — Specification & Architecture
 
+This is a curated summary. The full, unmodified source page is mirrored at
+[raw/agent-skills-overview.md](raw/agent-skills-overview.md) — drill into it for anything
+not covered here. Provenance: [raw/SOURCES.md](raw/SOURCES.md).
+
 Captured from the official Agent Skills overview on 2026-06-03.
 Source: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
 Open standard: https://agentskills.io · Reference implementation: https://github.com/anthropics/skills

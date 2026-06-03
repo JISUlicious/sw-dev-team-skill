@@ -1,5 +1,9 @@
 # Claude Code Skills — Features Reference
 
+This is a curated summary. The full, unmodified source page is mirrored at
+[raw/claude-code-skills.md](raw/claude-code-skills.md) — drill into it for anything not
+covered here. Provenance: [raw/SOURCES.md](raw/SOURCES.md).
+
 Captured from the official Claude Code skills docs on 2026-06-03.
 Source: https://code.claude.com/docs/en/skills
 

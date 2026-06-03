@@ -1,5 +1,9 @@
 # Agent Skills — Authoring Best Practices
 
+This is a curated summary. The full, unmodified source page is mirrored at
+[raw/agent-skills-best-practices.md](raw/agent-skills-best-practices.md) — drill into it
+for anything not covered here. Provenance: [raw/SOURCES.md](raw/SOURCES.md).
+
 Captured from the official best-practices guide on 2026-06-03.
 Source: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 
